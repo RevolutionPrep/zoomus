@@ -3,6 +3,7 @@ require 'zoomus/actions/user'
 require 'zoomus/actions/meeting'
 require 'zoomus/actions/report'
 require 'zoomus/actions/recording'
+require 'zoomus/actions/webinar'
 require 'zoomus/client'
 require 'zoomus/error'
 
