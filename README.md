@@ -31,6 +31,7 @@ Or install it yourself as:
 - meeting/delete
 - meeting/list
 - meeting/update
+- meeting/recording_list
 - report/getaccountreport
 - report/getuserreport
 - webinar/create
