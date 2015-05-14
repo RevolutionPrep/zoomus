@@ -9,6 +9,12 @@ module Zoomus
         Utils.parse_response self.class.post("/meeting/list", :query => options)
       end
 
+      def meeting_recording_list(*args)
+        options = Utils.extract_options!(args)
+        Utils.require_params(:host_id, options)
+        Utils.parse_response self.class.post("/recording/list", :query => options)
+      end
+
       def meeting_create(*args)
         options = Utils.extract_options!(args)
         Utils.require_params([:host_id, :topic, :type], options)
