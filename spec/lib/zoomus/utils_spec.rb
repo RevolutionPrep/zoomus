@@ -41,6 +41,31 @@ describe Zoomus::Utils do
     end
   end
 
+  describe "#parse_response" do
+    context 'when http response has 200 status code' do
+      let(:response) { double(HTTParty::Response, code: 200, parsed_response: { body: 'success' }) }
+
+      it 'returns parsed_response' do
+        expect(Utils.parse_response(response)).to eq({ body: 'success' })
+      end
+    end
+
+    context 'when http response has 503 status code' do
+      let(:response) { double(HTTParty::Response, code: 503) }
+
+      it 'returns hash with error message' do
+        expect(Utils.parse_response(response)).to eq({ 'error' => { 'message' => "API returned error code 503", 'code' => 503 } })
+      end
+    end
+
+    context 'when http response does not have a status code' do
+      it 'returns hash with error message' do
+        expect(Utils.parse_response('error')).to eq({ 'error' => { 'message' => "Could not communicate with Zoom API", 'code' => 500 } })
+      end
+    end
+  end
+
+
   describe "#process_datetime_params" do
     it "converts the Time objects to formatted strings" do
       args = {
