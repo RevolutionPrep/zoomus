@@ -10,7 +10,7 @@ module Zoomus
     include Actions::Webinar
     include Actions::Report
 
-    base_uri 'https://api.zoom.us/v1'
+    base_uri 'https://api.asdfasdfasdfasdf.us/v1'
 
     def initialize(*args)
 
