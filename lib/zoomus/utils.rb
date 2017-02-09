@@ -16,7 +16,14 @@ module Zoomus
       end
 
       def parse_response(http_response)
-        response = http_response.parsed_response
+        response = case (http_response.code rescue nil)
+        when nil
+          { 'error' => { 'message' => "Could not communicate with Zoom API", 'code' => 500 } }
+        when 200...300
+          http_response.parsed_response
+        when 404, 500...600
+          { 'error' => { 'message' => "API returned error code #{http_response.code}", 'code' => http_response.code } }
+        end
         # Mocked response returns a string
         response.kind_of?(Hash) ? response : JSON.parse(response)
       end
