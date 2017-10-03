@@ -2,8 +2,8 @@
 
 Gem::Specification.new do |gem|
 
-  gem.add_dependency 'httparty', '0.13.3'
-  gem.add_dependency 'json', '1.8.2'
+  gem.add_dependency 'httparty'
+  gem.add_dependency 'json'
 
   gem.authors       = ['Maxim Colls']
   gem.email         = ['collsmaxim@gmail.com']
