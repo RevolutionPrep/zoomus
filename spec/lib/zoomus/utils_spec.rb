@@ -50,6 +50,14 @@ describe Zoomus::Utils do
       end
     end
 
+    context 'when http response has 429 status code' do
+      let(:response) { double(HTTParty::Response, code: 429) }
+
+      it 'returns hash with error message' do
+        expect(Utils.parse_response(response)).to eq({ 'error' => { 'message' => "API returned error code 429", 'code' => 429 } })
+      end
+    end
+
     context 'when http response has 503 status code' do
       let(:response) { double(HTTParty::Response, code: 503) }
 

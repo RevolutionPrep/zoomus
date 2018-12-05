@@ -21,7 +21,7 @@ module Zoomus
           { 'error' => { 'message' => "Could not communicate with Zoom API", 'code' => 500 } }
         when 200...300
           http_response.parsed_response
-        when 404, 500...600
+        when 400...500, 500...600
           { 'error' => { 'message' => "API returned error code #{http_response.code}", 'code' => http_response.code } }
         end
         # Mocked response returns a string
