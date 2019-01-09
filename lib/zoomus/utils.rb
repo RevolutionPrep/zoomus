@@ -29,7 +29,7 @@ module Zoomus
         response = { 'error' => { 'message' => 'Request timeout', 'code' => 504 } }
       ensure
         # Mocked response returns a string
-        response.is_a?(Hash) ? response : JSON.parse(response)
+        return response.is_a?(Hash) ? response : JSON.parse(response)
       end
 
       def require_params(params, options)

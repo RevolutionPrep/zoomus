@@ -46,7 +46,7 @@ describe Zoomus::Utils do
       let(:response) { double(HTTParty::Response, code: 200, parsed_response: { body: 'success' }) }
 
       it 'returns parsed_response' do
-        expect(Utils.parse_response(response)).to eq({ body: 'success' })
+        expect(Utils.parse_response { response }).to eq({ body: 'success' })
       end
     end
 
@@ -54,13 +54,23 @@ describe Zoomus::Utils do
       let(:response) { double(HTTParty::Response, code: 503) }
 
       it 'returns hash with error message' do
-        expect(Utils.parse_response(response)).to eq({ 'error' => { 'message' => "API returned error code 503", 'code' => 503 } })
+        expect(Utils.parse_response { response }).to eq({ 'error' => { 'message' => "API returned error code 503", 'code' => 503 } })
+      end
+    end
+
+    context 'when http response times out' do
+      let(:response) { double(HTTParty::Response, code: nil, parsed_response: { body: 'success' }) }
+
+      it 'returns hash with error message' do
+        expect(Utils.parse_response { raise Net::ReadTimeout }).to eq({ 'error' => { 'message' => "Request timeout", 'code' => 504 } })
       end
     end
 
     context 'when http response does not have a status code' do
+      let(:response) { double(HTTParty::Response, code: nil, parsed_response: { body: 'success' }) }
+
       it 'returns hash with error message' do
-        expect(Utils.parse_response('error')).to eq({ 'error' => { 'message' => "Could not communicate with Zoom API", 'code' => 500 } })
+        expect(Utils.parse_response { response }).to eq({ 'error' => { 'message' => "Could not communicate with Zoom API", 'code' => 500 } })
       end
     end
   end
