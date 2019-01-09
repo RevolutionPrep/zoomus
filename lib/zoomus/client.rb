@@ -11,6 +11,8 @@ module Zoomus
     include Actions::Recording
     include Actions::Report
 
+    default_timeout 15
+
     base_uri 'https://api.zoom.us/v1'
 
     def initialize(*args)
