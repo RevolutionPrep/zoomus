@@ -15,17 +15,20 @@ module Zoomus
         end
       end
 
-      def parse_response(http_response)
-        response = case (http_response.code rescue nil)
-        when nil
-          { 'error' => { 'message' => "Could not communicate with Zoom API", 'code' => 500 } }
-        when 200...300
-          http_response.parsed_response
-        when 404, 500...600
-          { 'error' => { 'message' => "API returned error code #{http_response.code}", 'code' => http_response.code } }
-        end
+      def parse_response(&http_response)
+        response = case http_response.call&.code
+                   when nil
+                     { 'error' => { 'message' => "Could not communicate with Zoom API", 'code' => 500 } }
+                   when 200...300
+                     http_response.parsed_response
+                   when 404, 500...600
+                     { 'error' => { 'message' => "API returned error code #{http_response.code}", 'code' => http_response.code } }
+                   end
+      rescue Net::ReadTimeout
+        response = { 'error' => { 'message' => 'Request timeout', 'code' => 504 } }
+      ensure
         # Mocked response returns a string
-        response.kind_of?(Hash) ? response : JSON.parse(response)
+        response.is_a?(Hash) ? response : JSON.parse(response)
       end
 
       def require_params(params, options)
